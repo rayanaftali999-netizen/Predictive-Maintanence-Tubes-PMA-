@@ -144,7 +144,7 @@ yang di-push ke branch `main` akan otomatis ter-update di URL deployment.
 ## 📦 Sumber Dataset
 Dataset: **AI4I 2020 Predictive Maintenance Dataset**, Matzka, S. (2020),
 UCI Machine Learning Repository (CC BY 4.0).
-https://archive.ics.uci.edu/dataset/601
+https://archive.ics.uci.edu/dataset/601 / https://www.kaggle.com/datasets/stephanmatzka/predictive-maintenance-dataset-ai4i-2020
 
 ## 👥 Anggota Kelompok
 -Gibran Reza Al Ghazzali, 101022300124
