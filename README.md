@@ -110,7 +110,6 @@ recall jika biaya kegagalan tak terdeteksi sangat tinggi).
 ├── train.py              # EDA, preprocessing, training, tuning, evaluasi
 ├── app.py                # Streamlit web app (Deployment Opsi B)
 ├── api.py                # FastAPI REST API (Deployment Opsi A)
-├── curl_examples.sh       # Contoh pengujian endpoint
 ├── requirements.txt
 ├── model.pkl, scaler.pkl, metrics.json   # Artefak model terlatih
 └── confusion_matrix.png, roc_curves.png, feature_importance.png
@@ -133,19 +132,6 @@ python train.py
 streamlit run app.py
 ```
 Buka http://localhost:8501
-
-### 3b. Jalankan REST API (FastAPI) — lokal
-```bash
-uvicorn api:app --host 0.0.0.0 --port 8000
-```
-- Dokumentasi interaktif: http://localhost:8000/docs
-- Contoh pengujian: lihat `curl_examples.sh`
-
-```bash
-curl -X POST http://localhost:8000/predict \
-  -H "Content-Type: application/json" \
-  -d '{"Type":"L","Air temperature [K]":298.0,"Process temperature [K]":308.0,"Rotational speed [rpm]":1320,"Torque [Nm]":65.0,"Tool wear [min]":220}'
-```
 
 ## 🌐 Deployment Publik
 Aplikasi telah di-deploy dan dapat diakses publik melalui **Streamlit
