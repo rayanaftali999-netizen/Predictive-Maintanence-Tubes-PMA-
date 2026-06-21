@@ -1,0 +1,40 @@
+{
+  "winner": "Random Forest",
+  "feature_names": [
+    "Type",
+    "Air temperature [K]",
+    "Process temperature [K]",
+    "Rotational speed [rpm]",
+    "Torque [Nm]",
+    "Tool wear [min]",
+    "Temp diff [K]",
+    "Power [W]",
+    "Wear*Torque"
+  ],
+  "type_mapping": {
+    "L": 0,
+    "M": 1,
+    "H": 2
+  },
+  "metrics": {
+    "Random Forest": {
+      "accuracy": 0.9933,
+      "precision": 0.902,
+      "recall": 0.902,
+      "f1": 0.902,
+      "roc_auc": 0.974,
+      "cv_f1_mean": 0.8425,
+      "cv_f1_std": 0.0567
+    },
+    "XGBoost": {
+      "accuracy": 0.9913,
+      "precision": 0.8519,
+      "recall": 0.902,
+      "f1": 0.8762,
+      "roc_auc": 0.9922,
+      "cv_f1_mean": 0.8099,
+      "cv_f1_std": 0.0324
+    }
+  },
+  "baseline_f1": 0.0
+}
