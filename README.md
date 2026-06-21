@@ -13,7 +13,7 @@ alat), menggunakan dataset resmi **AI4I 2020 Predictive Maintenance Dataset**
 ## 🎯 Ringkasan Proyek
 - **Masalah:** Klasifikasi biner — apakah mesin akan gagal (*machine failure*) berdasarkan data sensor real-time?
 - **Dataset:** AI4I 2020, 10.000 baris, 3.39% failure rate (imbalanced)
-- **Model pembanding:** Random Forest vs XGBoost, dibandingkan terhadap baseline (DummyClassifier)
+- **Model pembanding:** Random Forest vs XGBoost, dibandingkan terhadap baseline 
 - **Metrik evaluasi:** Accuracy, Precision, Recall, F1-score, ROC-AUC, Confusion Matrix
 - **Deployment:** Web App interaktif (Streamlit)
 
