@@ -15,7 +15,7 @@ alat), menggunakan dataset resmi **AI4I 2020 Predictive Maintenance Dataset**
 - **Dataset:** AI4I 2020, 10.000 baris, 3.39% failure rate (imbalanced)
 - **Model pembanding:** Random Forest vs XGBoost, dibandingkan terhadap baseline (DummyClassifier)
 - **Metrik evaluasi:** Accuracy, Precision, Recall, F1-score, ROC-AUC, Confusion Matrix
-- **Deployment:** Web App interaktif (Streamlit) — Opsi B
+- **Deployment:** Web App interaktif (Streamlit)
 
 ## 📊 Dataset
 
