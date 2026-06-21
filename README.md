@@ -27,7 +27,6 @@ alat). Mengikuti struktur dataset **AI4I 2020 Predictive Maintenance** (UCI).
 ```
 .
 ├── ai4i2020.csv          # Dataset (sintetis, ganti dengan data UCI asli bila perlu)
-├── generate_dataset.py   # Generator dataset
 ├── train.py              # EDA, preprocessing, training, tuning, evaluasi
 ├── app.py                # Streamlit web app (Deployment Opsi B)
 ├── api.py                # FastAPI REST API (Deployment Opsi A)
@@ -44,9 +43,8 @@ alat). Mengikuti struktur dataset **AI4I 2020 Predictive Maintenance** (UCI).
 pip install -r requirements.txt
 ```
 
-### 2. (Opsional) Regenerasi dataset & latih ulang model
+### 2. (Opsional) latih ulang model
 ```bash
-python generate_dataset.py
 python train.py
 ```
 
