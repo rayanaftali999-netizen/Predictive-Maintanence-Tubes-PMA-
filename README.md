@@ -1,38 +1,119 @@
-# Predictive Maintenance — Deteksi Kerusakan Mesin
+# Predictive Maintenance — Deteksi Kerusakan Motor Listrik
 
 Proyek Tugas Besar Pengganti UAS **ABK4ABB3 Pembelajaran Mesin dan Aplikasi**
 Semester Genap 2025/2026.
 
 Sistem klasifikasi untuk memprediksi kegagalan mesin industri (predictive
 maintenance) berdasarkan data sensor (suhu, kecepatan rotasi, torsi, keausan
-alat). Mengikuti struktur dataset **AI4I 2020 Predictive Maintenance** (UCI).
+alat), menggunakan dataset resmi **AI4I 2020 Predictive Maintenance Dataset**
+(UCI Machine Learning Repository).
 
-## 🎯 Ringkasan
-- **Masalah:** Klasifikasi biner — apakah mesin akan gagal? (imbalanced, ~7% failure)
-- **Model pembanding:** Random Forest vs XGBoost, dibandingkan dengan baseline DummyClassifier
-- **Metrik:** Accuracy, Precision, Recall, F1, ROC-AUC, Confusion Matrix
-- **Deployment:** REST API (FastAPI) **dan** Web App (Streamlit)
+🔗 **Live Demo:** [2mmixpedtdwevg7wuexrmd.streamlit.app](https://2mmixpedtdwevg7wuexrmd.streamlit.app)
+🔗 **Repository:** [github.com/rayanaftali999-netizen/Predictive-Maintanence-Tubes-PMA-](https://github.com/rayanaftali999-netizen/Predictive-Maintanence-Tubes-PMA-)
 
-## 📊 Hasil (test set)
-| Model | Accuracy | Precision | Recall | F1 | ROC-AUC |
-|-------|----------|-----------|--------|----|---------|
-| Baseline (most_frequent) | 0.927 | — | 0.000 | 0.000 | — |
-| Random Forest | 0.987 | 0.960 | 0.864 | **0.909** | 0.986 |
-| XGBoost | 0.982 | 0.874 | 0.882 | 0.878 | 0.991 |
+## 🎯 Ringkasan Proyek
+- **Masalah:** Klasifikasi biner — apakah mesin akan gagal (*machine failure*) berdasarkan data sensor real-time?
+- **Dataset:** AI4I 2020, 10.000 baris, 3.39% failure rate (imbalanced)
+- **Model pembanding:** Random Forest vs XGBoost, dibandingkan terhadap baseline (DummyClassifier)
+- **Metrik evaluasi:** Accuracy, Precision, Recall, F1-score, ROC-AUC, Confusion Matrix
+- **Deployment:** Web App interaktif (Streamlit) — Opsi B
 
-> Baseline accuracy 92.7% dengan F1=0 menunjukkan mengapa accuracy menyesatkan
-> pada data tidak seimbang — F1 dan recall adalah metrik yang tepat di sini.
+## 📊 Dataset
+
+| Atribut | Nilai |
+|---|---|
+| Jumlah sampel | 10.000 |
+| Jumlah fitur asli | 14 kolom |
+| Failure rate | 3.39% (337 dari 10.000 — sangat imbalanced) |
+| Split | Train 6.999 / Validation 1.501 / Test 1.500 (stratified) |
+
+**Fitur yang digunakan untuk training** (9 fitur, setelah feature engineering):
+```
+Type, Air temperature [K], Process temperature [K], Rotational speed [rpm],
+Torque [Nm], Tool wear [min], Temp diff [K], Power [W], Wear*Torque
+```
+Tiga fitur terakhir (`Temp diff`, `Power`, `Wear*Torque`) adalah hasil *feature
+engineering* berbasis pengetahuan domain (selisih suhu, daya mekanik, dan
+interaksi keausan×torsi) yang merepresentasikan mekanisme fisik kegagalan mesin.
+
+Kolom label individual penyebab kegagalan (`TWF`, `HDF`, `PWF`, `OSF`, `RNF`)
+**tidak diikutkan** sebagai fitur karena akan menyebabkan *data leakage*
+(kolom tersebut secara langsung membentuk label `Machine failure`).
+
+## 📈 Hasil Eksperimen
+
+### Baseline
+Sebagai pembanding minimum, digunakan `DummyClassifier` (selalu menebak kelas
+mayoritas/"OK"):
+
+| Metrik | Nilai |
+|---|---|
+| Accuracy | 0.9660 |
+| F1-score | 0.0000 |
+
+> Baseline mencapai akurasi 96.6% tanpa mempelajari pola apa pun, namun **gagal
+> total** mendeteksi kegagalan (F1=0). Ini menunjukkan accuracy adalah metrik
+> yang menyesatkan pada data imbalanced seperti ini — recall dan F1-score
+> jauh lebih relevan untuk dievaluasi.
+
+### Hyperparameter Tuning (GridSearchCV, 5-fold Stratified CV)
+
+| Model | Best Parameters | Best CV F1 |
+|---|---|---|
+| Random Forest | `n_estimators=200, max_depth=None, min_samples_split=2, class_weight='balanced'` | 0.8425 (±0.0567) |
+| XGBoost | `n_estimators=200, max_depth=7, learning_rate=0.1` | 0.8099 (±0.0324) |
+
+### Evaluasi pada Test Set (1.500 sampel, 51 kasus failure)
+
+| Metrik | Random Forest | XGBoost |
+|---|---|---|
+| Accuracy | 0.9933 | 0.9913 |
+| Precision | 0.9020 | 0.8519 |
+| Recall | 0.9020 | 0.9020 |
+| **F1-score** | **0.9020** | 0.8762 |
+| ROC-AUC | 0.9740 | **0.9922** |
+
+**Confusion Matrix — Random Forest**
+```
+                Predicted OK   Predicted Failure
+True OK             1444               5
+True Failure          5              46
+```
+
+**Confusion Matrix — XGBoost**
+```
+                Predicted OK   Predicted Failure
+True OK             1441               8
+True Failure          5              46
+```
+
+### 🏆 Model Terpilih: **Random Forest** (F1 = 0.9020)
+
+Random Forest dipilih sebagai model produksi karena memberikan F1-score
+tertinggi pada threshold operasional (0.5) — presisi dan recall yang seimbang
+(90.2% / 90.2%), dengan hanya 5 false negative (kasus failure yang terlewat)
+dan 5 false positive (false alarm) dari 1.500 sampel uji.
+
+XGBoost mencatat ROC-AUC lebih tinggi (0.9922 vs 0.9740), yang berarti model
+ini lebih unggul dalam meranking probabilitas secara umum di seluruh
+kemungkinan threshold. Namun pada threshold default 0.5 yang dipakai sistem
+saat deployment, precision XGBoost lebih rendah (85.2%), menghasilkan lebih
+banyak false alarm dibanding Random Forest. Trade-off ini menjadi catatan
+penting: pemilihan threshold klasifikasi dapat dioptimalkan lebih lanjut
+sesuai kebutuhan operasional (mis. menurunkan threshold untuk memprioritaskan
+recall jika biaya kegagalan tak terdeteksi sangat tinggi).
 
 ## 🗂️ Struktur Repo
 ```
 .
-├── ai4i2020.csv          # Dataset (sintetis, ganti dengan data UCI asli bila perlu)
+├── ai4i2020.csv          # Dataset resmi AI4I 2020 (UCI)
+├── generate_dataset.py   # (referensi) generator dataset versi sintetis
 ├── train.py              # EDA, preprocessing, training, tuning, evaluasi
 ├── app.py                # Streamlit web app (Deployment Opsi B)
 ├── api.py                # FastAPI REST API (Deployment Opsi A)
-├── curl_examples.sh      # Contoh pengujian endpoint
+├── curl_examples.sh       # Contoh pengujian endpoint
 ├── requirements.txt
-├── model.pkl, scaler.pkl, metrics.json   # Artefak hasil training
+├── model.pkl, scaler.pkl, metrics.json   # Artefak model terlatih
 └── confusion_matrix.png, roc_curves.png, feature_importance.png
 ```
 
@@ -43,23 +124,23 @@ alat). Mengikuti struktur dataset **AI4I 2020 Predictive Maintenance** (UCI).
 pip install -r requirements.txt
 ```
 
-### 2. (Opsional) latih ulang model
+### 2. (Opsional) Latih ulang model
 ```bash
 python train.py
 ```
 
-### 3a. Jalankan Web App (Streamlit)
+### 3a. Jalankan Web App (Streamlit) — lokal
 ```bash
 streamlit run app.py
 ```
 Buka http://localhost:8501
 
-### 3b. Jalankan REST API (FastAPI)
+### 3b. Jalankan REST API (FastAPI) — lokal
 ```bash
 uvicorn api:app --host 0.0.0.0 --port 8000
 ```
 - Dokumentasi interaktif: http://localhost:8000/docs
-- Inference lokal: lihat `curl_examples.sh`
+- Contoh pengujian: lihat `curl_examples.sh`
 
 ```bash
 curl -X POST http://localhost:8000/predict \
@@ -67,16 +148,19 @@ curl -X POST http://localhost:8000/predict \
   -d '{"Type":"L","Air temperature [K]":298.0,"Process temperature [K]":308.0,"Rotational speed [rpm]":1320,"Torque [Nm]":65.0,"Tool wear [min]":220}'
 ```
 
-## 🌐 Deployment Publik (gratis)
-- **Streamlit:** push repo ke [Streamlit Community Cloud](https://share.streamlit.io) atau Hugging Face Spaces (SDK: streamlit)
-- **FastAPI:** deploy ke [Render](https://render.com) / [Railway](https://railway.app), start command: `uvicorn api:app --host 0.0.0.0 --port $PORT`
-- **TODO kelompok:** tempel URL deployment publik di sini → `https://...`
+## 🌐 Deployment Publik
+Aplikasi telah di-deploy dan dapat diakses publik melalui **Streamlit
+Community Cloud**:
 
-## 📦 Dataset
-Versi yang disertakan adalah data **sintetis** dengan logika kegagalan fisik yang
-sama seperti AI4I 2020 (TWF/HDF/PWF/OSF/RNF). Untuk memakai data asli, unduh
-`ai4i2020.csv` dari [UCI](https://archive.ics.uci.edu/dataset/601) atau Kaggle
-(lisensi CC BY 4.0) dan letakkan di folder ini — seluruh kode tetap berjalan.
+👉 **https://2mmixpedtdwevg7wuexrmd.streamlit.app**
+
+Aplikasi terhubung langsung ke repository GitHub ini — setiap perubahan kode
+yang di-push ke branch `main` akan otomatis ter-update di URL deployment.
+
+## 📦 Sumber Dataset
+Dataset: **AI4I 2020 Predictive Maintenance Dataset**, Matzka, S. (2020),
+UCI Machine Learning Repository (CC BY 4.0).
+https://archive.ics.uci.edu/dataset/601
 
 ## 👥 Anggota Kelompok
 - Nama, NIM
