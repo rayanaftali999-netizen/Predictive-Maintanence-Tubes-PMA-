@@ -1,4 +1,4 @@
-# Predictive Maintenance — Deteksi Kerusakan Motor Listrik
+# Predictive Maintenance
 
 Proyek Tugas Besar Pengganti UAS **ABK4ABB3 Pembelajaran Mesin dan Aplikasi**
 Semester Genap 2025/2026.
