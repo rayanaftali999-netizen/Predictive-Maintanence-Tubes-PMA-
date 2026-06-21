@@ -107,7 +107,6 @@ recall jika biaya kegagalan tak terdeteksi sangat tinggi).
 ```
 .
 ├── ai4i2020.csv          # Dataset resmi AI4I 2020 (UCI)
-├── generate_dataset.py   # (referensi) generator dataset versi sintetis
 ├── train.py              # EDA, preprocessing, training, tuning, evaluasi
 ├── app.py                # Streamlit web app (Deployment Opsi B)
 ├── api.py                # FastAPI REST API (Deployment Opsi A)
