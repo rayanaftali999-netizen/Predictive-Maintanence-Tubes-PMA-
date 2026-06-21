@@ -9,7 +9,6 @@ alat), menggunakan dataset resmi **AI4I 2020 Predictive Maintenance Dataset**
 (UCI Machine Learning Repository).
 
 🔗 **Live Demo:** [2mmixpedtdwevg7wuexrmd.streamlit.app](https://2mmixpedtdwevg7wuexrmd.streamlit.app)
-🔗 **Repository:** [github.com/rayanaftali999-netizen/Predictive-Maintanence-Tubes-PMA-](https://github.com/rayanaftali999-netizen/Predictive-Maintanence-Tubes-PMA-)
 
 ## 🎯 Ringkasan Proyek
 - **Masalah:** Klasifikasi biner — apakah mesin akan gagal (*machine failure*) berdasarkan data sensor real-time?
