@@ -148,7 +148,11 @@ https://archive.ics.uci.edu/dataset/601
 
 ## 👥 Anggota Kelompok
 -Gibran Reza Al Ghazzali, 101022300124
+
 -Naftali Aptaputra Raya, 101022300216
+
 -Fredrickom Cikal Sabonangin, 1102210028
+
 -Farhan Rusydan Arief, 1102223164
+
 -Muhammad Khaisyar Lubis, 1102204445
