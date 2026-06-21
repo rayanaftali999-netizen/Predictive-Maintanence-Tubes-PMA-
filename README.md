@@ -36,7 +36,7 @@ engineering* berbasis pengetahuan domain (selisih suhu, daya mekanik, dan
 interaksi keausan×torsi) yang merepresentasikan mekanisme fisik kegagalan mesin.
 
 Kolom label individual penyebab kegagalan (`TWF`, `HDF`, `PWF`, `OSF`, `RNF`)
-**tidak diikutkan** sebagai fitur karena akan menyebabkan *data leakage*
+**tidak dipakai** sebagai fitur karena akan menyebabkan *data leakage*
 (kolom tersebut secara langsung membentuk label `Machine failure`).
 
 ## 📈 Hasil Eksperimen
