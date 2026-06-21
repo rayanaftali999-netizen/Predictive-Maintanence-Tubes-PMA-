@@ -126,7 +126,7 @@ pip install -r requirements.txt
 python train.py
 ```
 
-### 3a. Jalankan Web App (Streamlit) — lokal
+### 3. Jalankan Web App (Streamlit) — lokal
 ```bash
 streamlit run app.py
 ```
