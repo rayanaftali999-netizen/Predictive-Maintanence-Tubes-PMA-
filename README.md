@@ -107,8 +107,7 @@ recall jika biaya kegagalan tak terdeteksi sangat tinggi).
 .
 ├── ai4i2020.csv          # Dataset resmi AI4I 2020 (UCI)
 ├── train.py              # EDA, preprocessing, training, tuning, evaluasi
-├── app.py                # Streamlit web app (Deployment Opsi B)
-├── api.py                # FastAPI REST API (Deployment Opsi A)
+├── app.py                # Streamlit web app
 ├── requirements.txt
 ├── model.pkl, scaler.pkl, metrics.json   # Artefak model terlatih
 └── confusion_matrix.png, roc_curves.png, feature_importance.png
