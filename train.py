@@ -1,14 +1,5 @@
 """
-Predictive Maintenance — Model Training & Evaluation
-ABK4ABB3 Pembelajaran Mesin dan Aplikasi
-
-Pipeline:
-  1. Load + EDA summary
-  2. Preprocess (feature engineering, encoding, scaling, stratified split)
-  3. Baseline (DummyClassifier) + 2 models (Random Forest, XGBoost)
-  4. Hyperparameter tuning (GridSearchCV) + 5-fold stratified cross-validation
-  5. Quantitative evaluation on held-out test set
-  6. Save best model + scaler + metadata for deployment
+Predictive Maintenance
 """
 import json, joblib
 import numpy as np
@@ -29,15 +20,14 @@ from xgboost import XGBClassifier
 RANDOM_STATE = 42
 np.random.seed(RANDOM_STATE)
 
-# ------------------------------------------------------------------ 1. LOAD
+# 1. LOAD
 df = pd.read_csv('ai4i2020.csv')
 print('=== DATASET ===')
 print('Shape:', df.shape)
 print('Failure rate: %.2f%%' % (100 * df['Machine failure'].mean()))
 
-# ------------------------------------------------------------------ 2. PREPROCESS
-# Drop identifiers and individual failure-mode leakage columns (we predict the
-# overall 'Machine failure' label; TWF/HDF/PWF/OSF/RNF directly encode the answer)
+# 2. PREPROCESS
+# drop overall 'Machine failure' label; TWF/HDF/PWF/OSF/RNF directly encode the answer
 drop_cols = ['UDI', 'Product ID', 'TWF', 'HDF', 'PWF', 'OSF', 'RNF']
 data = df.drop(columns=drop_cols).copy()
 
@@ -66,18 +56,18 @@ X_train_s = scaler.transform(X_train)
 X_val_s   = scaler.transform(X_val)
 X_test_s  = scaler.transform(X_test)
 
-# ------------------------------------------------------------------ 3. BASELINE
+# 3. BASELINE
 baseline = DummyClassifier(strategy='most_frequent').fit(X_train_s, y_train)
 base_pred = baseline.predict(X_test_s)
 print('\n=== BASELINE (most_frequent) ===')
 print('Accuracy: %.4f | F1: %.4f' % (
     accuracy_score(y_test, base_pred), f1_score(y_test, base_pred, zero_division=0)))
 
-# ------------------------------------------------------------------ 4. TUNING + CV
+# 4. TUNING dan CV
 cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=RANDOM_STATE)
 results = {}
 
-# --- Random Forest ---
+# Random Forest
 print('\n=== RANDOM FOREST: GridSearchCV ===')
 rf_grid = {
     'n_estimators': [100, 200],
@@ -93,7 +83,7 @@ rf_best = rf_search.best_estimator_
 print('Best params:', rf_search.best_params_)
 print('Best CV F1: %.4f' % rf_search.best_score_)
 
-# --- XGBoost ---
+# XGBoost 
 print('\n=== XGBOOST: GridSearchCV ===')
 scale_pos = (y_train == 0).sum() / (y_train == 1).sum()
 xgb_grid = {
@@ -110,7 +100,7 @@ xgb_best = xgb_search.best_estimator_
 print('Best params:', xgb_search.best_params_)
 print('Best CV F1: %.4f' % xgb_search.best_score_)
 
-# ------------------------------------------------------------------ 5. EVALUATE
+# 5. EVALUATE
 def evaluate(name, model, Xt, yt):
     pred = model.predict(Xt)
     proba = model.predict_proba(Xt)[:, 1]
@@ -140,7 +130,7 @@ best_model = rf_best if winner == 'Random Forest' else xgb_best
 best_pred = rf_pred if winner == 'Random Forest' else xgb_pred
 print(f'\n>>> BEST MODEL: {winner} (F1={results[winner]["f1"]:.4f})')
 
-# ------------------------------------------------------------------ 6. PLOTS
+# 6. PLOTS
 # Confusion matrix
 fig, ax = plt.subplots(1, 2, figsize=(12, 4.5))
 for i, (nm, pr) in enumerate([('Random Forest', rf_pred), ('XGBoost', xgb_pred)]):
@@ -167,7 +157,7 @@ imp.plot.barh(color='teal')
 plt.title(f'Feature Importance — {winner}'); plt.tight_layout()
 plt.savefig('feature_importance.png', dpi=130); plt.close()
 
-# ------------------------------------------------------------------ 7. SAVE
+# 7. SAVE
 joblib.dump(best_model, 'model.pkl')
 joblib.dump(scaler, 'scaler.pkl')
 meta = {
