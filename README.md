@@ -10,14 +10,14 @@ alat), menggunakan dataset resmi **AI4I 2020 Predictive Maintenance Dataset**
 
 🔗 **Live Demo:** [2mmixpedtdwevg7wuexrmd.streamlit.app](https://2mmixpedtdwevg7wuexrmd.streamlit.app)
 
-## 🎯 Ringkasan Proyek
+## Ringkasan Proyek
 - **Masalah:** Klasifikasi biner — apakah mesin akan gagal (*machine failure*) berdasarkan data sensor real-time?
 - **Dataset:** AI4I 2020, 10.000 baris, 3.39% failure rate (imbalanced)
 - **Model pembanding:** Random Forest vs XGBoost, dibandingkan terhadap baseline (Dummy Classifier)
 - **Metrik evaluasi:** Accuracy, Precision, Recall, F1-score, ROC-AUC, Confusion Matrix
 - **Deployment:** Web App interaktif (Streamlit)
 
-## 📊 Dataset
+## Dataset
 
 | Atribut | Nilai |
 |---|---|
@@ -39,7 +39,7 @@ Kolom label individual penyebab kegagalan (`TWF`, `HDF`, `PWF`, `OSF`, `RNF`)
 **tidak dipakai** sebagai fitur karena akan menyebabkan *data leakage*
 (kolom tersebut secara langsung membentuk label `Machine failure`).
 
-## 📈 Hasil Eksperimen
+## Hasil Eksperimen
 
 ### Baseline
 Sebagai pembanding minimum, digunakan `DummyClassifier` (selalu menebak kelas
@@ -86,7 +86,7 @@ True OK             1441               8
 True Failure          5              46
 ```
 
-### 🏆 Model Terpilih: **Random Forest** (F1 = 0.9020)
+### Model Terpilih: **Random Forest** (F1 = 0.9020)
 
 Random Forest dipilih sebagai model produksi karena memberikan F1-score
 tertinggi pada threshold operasional (0.5) — presisi dan recall yang seimbang
@@ -106,7 +106,7 @@ recall jika biaya kegagalan tak terdeteksi sangat tinggi).
 ```
 .
 ├── ai4i2020.csv          # Dataset resmi AI4I 2020 (UCI)
-├── train.py              # EDA, preprocessing, training, tuning, evaluasi
+├── train.py              # File Training
 ├── app.py                # Streamlit web app
 ├── requirements.txt
 ├── model.pkl, scaler.pkl, metrics.json   # Artefak model terlatih
@@ -131,21 +131,21 @@ streamlit run app.py
 ```
 Buka http://localhost:8501
 
-## 🌐 Deployment Publik
+## Deployment Publik
 Aplikasi telah di-deploy dan dapat diakses publik melalui **Streamlit
 Community Cloud**:
 
-👉 **https://2mmixpedtdwevg7wuexrmd.streamlit.app**
+**https://2mmixpedtdwevg7wuexrmd.streamlit.app**
 
 Aplikasi terhubung langsung ke repository GitHub ini — setiap perubahan kode
 yang di-push ke branch `main` akan otomatis ter-update di URL deployment.
 
-## 📦 Sumber Dataset
+## Sumber Dataset
 Dataset: **AI4I 2020 Predictive Maintenance Dataset**, Matzka, S. (2020),
 UCI Machine Learning Repository (CC BY 4.0).
 https://archive.ics.uci.edu/dataset/601 / https://www.kaggle.com/datasets/stephanmatzka/predictive-maintenance-dataset-ai4i-2020
 
-## 👥 Anggota Kelompok
+## Anggota Kelompok
 -Gibran Reza Al Ghazzali, 101022300124
 
 -Naftali Aptaputra Raya, 101022300216
